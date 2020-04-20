@@ -3,35 +3,35 @@ module App
 open Fable.Import
 
 let window = Browser.Dom.window
-
+let body = window.document.querySelector "body"
 let canvas: Browser.Types.HTMLCanvasElement = unbox window.document.querySelector "canvas"
 
-let body = window.document.querySelector "body"
+let width = canvas.parentElement.offsetWidth
+let height = canvas.parentElement.offsetHeight
 
-let maxWidth = canvas.parentElement.offsetWidth
-let maxHeight = canvas.parentElement.offsetHeight
-let targetWidthHeightRatio = 1.5
-let actualWidthHeightRatio = maxWidth / maxHeight
+let xoverflow = width - height * 1.5
+let yoverflow = height - (width / 3.0 * 2.0)
 
-let width =
-    if actualWidthHeightRatio > targetWidthHeightRatio
-    then round (maxHeight * targetWidthHeightRatio)
-    else maxWidth
+let xpadding =
+    if xoverflow > 0.0 then xoverflow / width * 1.5 else 0.0
 
-let height =
-    if actualWidthHeightRatio > targetWidthHeightRatio
-    then maxHeight
-    else round (maxWidth / targetWidthHeightRatio)
+let ypadding =
+    if yoverflow > 0.0 then yoverflow / height * 2.0 else 0.0
+
+let xmin = -2.0 - xpadding
+let xmax = 1.0 + xpadding
+let ymin = -1.0 - ypadding
+let ymax = 1.0 + ypadding
+
+let xdiff = xmax - xmin
+let ydiff = ymax - ymin
+let xdiv = width - 1.0
+let ydiv = height - 1.0
 
 canvas.width <- width
 canvas.height <- height
 
 let ctx = canvas.getContext_2d (Some({| alpha = false |}))
-
-let xmin = -2.0
-let xmax = 1.0
-let ymin = -1.0
-let ymax = 1.0
 
 let maxIterations = 1000
 
@@ -68,11 +68,6 @@ let mandelColor i =
 
 let img = ctx.getImageData (0.0, 0.0, width, height)
 let data = img.data
-
-let xdiff = xmax - xmin
-let ydiff = ymax - ymin
-let xdiv = width - 1.0
-let ydiv = height - 1.0
 
 for iy in 0.0 .. height do
     for ix in 0.0 .. width do
