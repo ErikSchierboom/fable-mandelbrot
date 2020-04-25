@@ -33,7 +33,7 @@ canvas.height <- height
 
 let ctx = canvas.getContext_2d (Some({| alpha = false |}))
 
-let maxIterations = 1000
+let maxIterations = 200
 
 let mandelIterations cx cy =
     let mutable x = 0.0
