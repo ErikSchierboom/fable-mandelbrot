@@ -1,7 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build": "webpack --mode=production",
+    "deploy": "firebase deploy"
   },
   "dependencies": {
     "@babel/core": "^7.9.0",
